@@ -10,10 +10,14 @@ function recorrer_directorio {
 			echo "DIR: "$file
 			cd $file
 			recorrer_directorio ./
-		elif [ -f file ];then
+		elif [ -f $file ];then
+			echo "Soy un fichero"
 			busqueda=`cat $file | grep "Datos Personales"`
-			if [ ! -z $busqueda ];then
-				echo "obtuve datos "$busqueda			
+			echo "una busqueda"$busqueda 
+			if [ -z "$busqueda" ];then
+				datos=`cat $file` 
+				echo "obtuve datos "$busqueda
+				echo "mis datos son" $datos			
 			fi	 				
 		fi
 	done			
