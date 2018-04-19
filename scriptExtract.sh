@@ -2,22 +2,17 @@
 
 function recorrer_directorio {
 	dir=`ls`
-	echo "tengo esto: "$dir
 	for file in $dir;
 	do
-		echo "soy : "$file
 		if [ -d $file ];then
-			echo "DIR: "$file
 			cd $file
 			recorrer_directorio ./
 		elif [ -f $file ];then
-			echo "Soy un fichero"
-			busqueda=`cat $file | grep "Datos Personales"`
-			echo "una busqueda"$busqueda 
-			if [ -z "$busqueda" ];then
-				datos=`cat $file` 
-				echo "obtuve datos "$busqueda
-				echo "mis datos son" $datos			
+			busqueda=`cat $file | grep "Datos Personales"` 
+			if [ ! -z "$busqueda" ];then
+				NOMBRE=`cat $file | grep -E 'Nombre:* | nombre:*'`
+				DNI=`cat $file | grep -E 'Dni:* | dni:*'`
+ 				CORREO=`cat $file | grep -E 'Correo:* | correo:* | email:* | Email:*'`							
 			fi	 				
 		fi
 	done			
