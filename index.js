@@ -2,72 +2,39 @@
 var shell= require('shelljs');
 
 var path=process.argv[2];
-get_data(path);
-/* recorrer_directorio(path);
-function recorrer_directorio(path){
-	shell.ls(path).forEach(function(file){
-        console.log(file);
-        console.log(shell.test('-d',file));
-        if(shell.test('-d',file)){
-            console.log("directorio");
-            shell.cd(file);
-            recorrer_directorio('./');
-            shell.cd('..');
-        }else if(shell.test('-f',file)){
-            console.log("fichero");
-            let busqueda=cat(file).grep('Datos Personales');
-            if(busqueda){
-                let nombre=cat(file).grep('-E','Nombre:* | nombre:*')
-                console.log(nombre);
-            }
+console.log(get_data(readfile(path)));
+
+function readfile(file){
+    var user=""
+    if (shell.test('-f',file)){
+        let busqueda=shell.cat(file).grep('Datos Personales');
+        if(busqueda.stdout){    
+            var nombre=shell.cat(path).grep('Nombre:* | nombre:*');
+            var dni=shell.cat(path).grep('Dni:* | dni:*');
+            var email=shell.cat(path).grep('Correo:* | correo:* | email:* | Email:*');
+            user=nombre.stdout+dni.stdout+email.stdout;
+            return user
         }
-    })
-}  */
+    }    
+}
 
 
-function get_data(path){
+function get_data(data){
     var user={
     }
-    if (shell.test('-f',path)){
-       let busqueda=shell.cat(path).grep('Datos Personales');
-       if(busqueda.stdout){
-           var nombre=shell.cat(path).grep('Nombre:* | nombre:*');
-           var name=nombre.stdout.split(":");
-           user.name=name[1].replace('\n','').replace(' ','');
+           var datos_json = data.split('\n')
+           var name=datos_json[0].split(":");
+           user.name=name[1].replace('\n','').replace(' ','').replace('\r','');
 
-           let dni=shell.cat(path).grep('Dni:* | dni:*');
-           var user_dni=dni.stdout.split(":");
-           user.dni=user_dni[1].replace('\n','').replace(' ','');
+           
+           var user_dni=datos_json[1].split(":");
+           user.dni=user_dni[1].replace('\n','').replace(' ','').replace('\r','');
 
-           let email=shell.cat(path).grep('Correo:* | correo:* | email:* | Email:*');
-           var user_email=email.stdout.split(":");
-           user.email=user_email[1].replace('\n','').replace(' ','');
+           var user_email=datos_json[2].split(":");
+           user.email=user_email[1].replace('\n','').replace(' ','').replace('\r','');
            return user;
-       }
-    }
-}
-	/* for file in $dir;
-	do
-		if [ -d $file ];then
-			cd $file
-			recorrer_directorio ./
-			cd ..
-		elif [ -f $file ];then
-			busqueda=`cat $file | grep "Datos Personales"` 
-			if [ ! -z "$busqueda" ];then
-				NOMBRE=`cat $file | grep -E 'Nombre:* | nombre:*' | cut -d ':' -f 2 | cut -f 2-4 -d ' '`
-				DNI=`cat $file | grep -E 'Dni:* | dni:*' | cut -d ':' -f 2 | cut -f 2 -d ' '`
- 				CORREO=`cat $file | grep -E 'Correo:* | correo:* | email:* | Email:*' | cut -d ':' -f 2 | cut -f 2 -d ' '`
-				echo "{ \"name\":\""$NOMBRE"\", \"dni\":"\"$DNI"\", \"email\":"\"$CORREO"\"}" >> ~/Escritorio/users.json							
-			fi	 				
-		fi
-	done			
 }
 
+function save_database(){
 
-DIR=$1
-if [ -d $1 ];then
-        cd $DIR
-        recorrer_directorio $DIR
-	cat ~/Escritorio/users.json
-fi */
+}
