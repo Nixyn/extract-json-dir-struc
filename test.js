@@ -1,22 +1,5 @@
-describe('Users', (n) => {
-  test('Debería comprobar si la entrada es un archivo de texto', () => {
-    expect(get_Data()).toBe('');
-    expect(fromNumber(2)).toBe('II');
+describe('Users', () => {
+  test('Debería comprobar si el fichero tiene todos los campos', () => {
+    expect(get_Data("./users/Usuario1/datos.txt")).toBe('{Nombre : Juan Domingez, Dni : 44323567F, Correo: hola@gmail.com}');
   });
-
-  test('Debería convertir número a romano - Letra V', () => {
-    expect(fromNumber(4)).toBe('IV');
-    expect(fromNumber(5)).toBe('V');
-  });
-
-  test('Debería convertir número a romano - Letra X', () => {
-    expect(fromNumber(9)).toBe('IX');
-    expect(fromNumber(10)).toBe('X');
-    expect(fromNumber(11)).toBe('XI');
-  });
-
-  test('Debería convertir número a romano - Letra Extra', () => {
-    expect(fromNumber(2018)).toBe('MMXVIII');
-    expect(fromNumber(2648)).toBe('MMDCXLVIII');
-  });
-})
+});
